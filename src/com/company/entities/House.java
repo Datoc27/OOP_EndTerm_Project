@@ -14,11 +14,11 @@ public class House extends Property implements IHouse {
 
     public String onSelling() {return super.getType() + " which is located in " + super.getLocation() + " is on the market for buying";}
 
-    public String beSold() {return super.getType() + " which is located in " + super.getLocation() + " is being sold to a customer";}
+    public String beSold() {return super.getType() + " which is located in " + super.getLocation() + " is being sold to a customer with " + this.getDiscount() + "discount";}
 
     public void setDiscount(double discount) {this.discount = discount;}
 
-    public static double getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 

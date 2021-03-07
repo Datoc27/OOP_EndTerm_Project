@@ -7,6 +7,7 @@ public class Property {
     private int rooms;
     private boolean hasOwner;
     private double price;
+    private int customerId;
 
     public Property() {
     }
@@ -18,6 +19,15 @@ public class Property {
         this.rooms = rooms;
         this.hasOwner = hasOwner;
         this.price = price;
+    }
+
+    public Property(String type, String location, int rooms, boolean hasOwner, double price, int customerId) {
+        this.type = type;
+        this.location = location;
+        this.rooms = rooms;
+        this.hasOwner = hasOwner;
+        this.price = price;
+        this.customerId = customerId;
     }
 
     public Property(String type, String location, int rooms, boolean hasOwner, double price) {
@@ -76,6 +86,14 @@ public class Property {
         this.price = price;
     }
 
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return "Property{" +
@@ -85,6 +103,7 @@ public class Property {
                 ", rooms=" + rooms +
                 ", hasOwner=" + hasOwner +
                 ", price=" + price +
+                ", customerId=" + customerId +
                 '}';
     }
 }

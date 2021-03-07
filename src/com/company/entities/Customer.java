@@ -8,17 +8,15 @@ public class Customer implements ICustomer {
     private String surname;
     private int age;
     private double bankAccount;
-    private int propertyId;
 
     public Customer() {
     }
 
-    public Customer(String name, String surname, int age, double bankAccount, int propertyId) {
+    public Customer(String name, String surname, int age, double bankAccount) {
         this.name = name;
         this.surname = surname;
         this.age = age;
         this.bankAccount = bankAccount;
-        this.propertyId = propertyId;
     }
 
     public int getId() {
@@ -61,14 +59,6 @@ public class Customer implements ICustomer {
         this.bankAccount = bankAccount;
     }
 
-    public int getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(int propertyId) {
-        this.propertyId = propertyId;
-    }
-
     public String lookFor() {return this.getName() + " " + this.getSurname() + " is looking for a neautiful place to live";}
 
     public void customerInfo(){
@@ -83,7 +73,6 @@ public class Customer implements ICustomer {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", bankAccount=" + bankAccount +
-                ", propertyId=" + propertyId +
                 '}';
     }
 }

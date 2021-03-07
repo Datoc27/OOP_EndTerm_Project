@@ -4,16 +4,22 @@ import com.company.entities.interfaces.IDeal;
 
 public class Deal implements IDeal {
     private int id;
-    private int customer_id;
-    private int property_id;
+    private int customerId;
+    private int propertyId;
     private boolean finished;
 
     public Deal() {
     }
 
-    public Deal(int customer_id, int property_id, boolean finished) {
-        this.customer_id = customer_id;
-        this.property_id = property_id;
+    public Deal(int id, int customerId, int propertyId) {
+        this.id = id;
+        this.customerId = customerId;
+        this.propertyId = propertyId;
+    }
+
+    public Deal(int customerId, int propertyId, boolean finished) {
+        this.customerId = customerId;
+        this.propertyId = propertyId;
         this.finished = finished;
     }
 
@@ -26,19 +32,19 @@ public class Deal implements IDeal {
     }
 
     public int getCustomer_id() {
-        return customer_id;
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomer_id(int customerId) {
+        this.customerId = customerId;
     }
 
     public int getProperty_id() {
-        return property_id;
+        return propertyId;
     }
 
-    public void setProperty_id(int property_id) {
-        this.property_id = property_id;
+    public void setProperty_id(int propertyId) {
+        this.propertyId = propertyId;
     }
 
     public boolean isFinished() {
@@ -59,8 +65,8 @@ public class Deal implements IDeal {
     public String toString() {
         return "Deal{" +
                 "id=" + id +
-                ", customer_id=" + customer_id +
-                ", property_id=" + property_id +
+                ", customer_id=" + customerId +
+                ", property_id=" + propertyId +
                 ", finished=" + finished +
                 '}';
     }
