@@ -110,30 +110,16 @@ public class DealRepository implements IDealRepository {
         try {
             connection = dbManager.getConnection();
 
-            if (property.getCustomerId() == null) {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO properties (type, location, rooms, hasOwner, price) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO properties (type, location, rooms, hasOwner, price) VALUES (?, ?, ?, ?, ?)");
 
-                preparedStatement.setString(1, property.getType());
-                preparedStatement.setString(2, property.getLocation());
-                preparedStatement.setInt(3, property.getRooms());
-                preparedStatement.setBoolean(4, property.isHasOwner());
-                preparedStatement.setDouble(5, property.getPrice());
+            preparedStatement.setString(1, property.getType());
+            preparedStatement.setString(2, property.getLocation());
+            preparedStatement.setInt(3, property.getRooms());
+            preparedStatement.setBoolean(4, property.isHasOwner());
+            preparedStatement.setDouble(5, property.getPrice());
 
-                preparedStatement.execute();
-            }
-            else {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO properties (type, location, rooms, hasOwner, price, customer_id) VALUES (?, ?, ?, ?, ?, ?)");
+            preparedStatement.execute();
 
-                preparedStatement.setString(1, property.getType());
-                preparedStatement.setString(2, property.getLocation());
-                preparedStatement.setInt(3, property.getRooms());
-                preparedStatement.setBoolean(4, property.isHasOwner());
-                preparedStatement.setDouble(5, property.getPrice());
-                preparedStatement.setInt(6, property.getCustomerId().intValue());
-
-
-                preparedStatement.execute();
-            }
             return true;
         }
         catch (Exception e) {

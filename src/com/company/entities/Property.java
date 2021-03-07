@@ -7,7 +7,7 @@ public class Property {
     private int rooms;
     private boolean hasOwner;
     private double price;
-    private Integer customerId;
+    private int customerId;
 
     public Property() {
     }
@@ -21,7 +21,7 @@ public class Property {
         this.price = price;
     }
 
-    public Property(String type, String location, int rooms, boolean hasOwner, double price, Integer customerId) {
+    public Property(String type, String location, int rooms, boolean hasOwner, double price, int customerId) {
         this.type = type;
         this.location = location;
         this.rooms = rooms;
