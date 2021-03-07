@@ -19,6 +19,14 @@ public class Customer implements ICustomer {
         this.bankAccount = bankAccount;
     }
 
+    public Customer(int id, String name, String surname, int age, double bankAccount) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.bankAccount = bankAccount;
+    }
+
     public int getId() {
         return id;
     }
@@ -59,10 +67,13 @@ public class Customer implements ICustomer {
         this.bankAccount = bankAccount;
     }
 
-    public String lookFor() {return this.getName() + " " + this.getSurname() + " is looking for a neautiful place to live";}
+    public String lookFor() {return this.getName() + " " + this.getSurname() + " is looking for a beautiful place to live";}
+
+    public String buyProperty() {return this.getName() + " " + this.getSurname() + " has bought a new property. His there is " + this.getBankAccount() + "left in their bank account!";}
 
     public void customerInfo(){
         System.out.println(lookFor());
+        System.out.println(buyProperty());
     }
 
     @Override

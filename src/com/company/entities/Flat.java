@@ -12,6 +12,10 @@ public class Flat extends Property implements IFlat {
         super(type, location, rooms, hasOwner, price);
     } //2nd constructor
 
+    public Flat(int id, String type, String location, int rooms, boolean hasOwner, double price) {
+        super(id, type, location, rooms, hasOwner, price);
+    }//3rd constructor
+
     public String onSelling() {return super.getType() + " which is located in " + super.getLocation() + " is on the market for renting";}
 
     public String beRented() {return super.getType() + " which is located in " + super.getLocation() + " is being rented by a customer with paying " + this.getPublicServices() + " for public services";}

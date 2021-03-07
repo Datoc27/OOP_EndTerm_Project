@@ -7,6 +7,8 @@ import com.company.entities.Property;
 import java.util.ArrayList;
 
 public interface IDealRepository {
+    Customer getCustomerById(int id);
+    Property getPropertyById(int id);
     boolean addCustomer(Customer customer); // add customers to the database
     boolean addProperty(Property property); // add property to the database
     boolean makeDeal(Deal deal); // make a deal

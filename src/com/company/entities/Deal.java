@@ -23,6 +23,13 @@ public class Deal implements IDeal {
         this.finished = finished;
     }
 
+    public Deal(int id, int customerId, int propertyId, boolean finished) {
+        this.id = id;
+        this.customerId = customerId;
+        this.propertyId = propertyId;
+        this.finished = finished;
+    }
+
     public int getId() {
         return id;
     }

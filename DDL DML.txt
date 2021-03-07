@@ -1,0 +1,66 @@
+CREATE DATABASE PropertyMarket;
+
+CREATE TABLE customers (
+	customer_id SERIAL,
+	name VARCHAR,
+	surname VARCHAR,
+	age INT,
+	bankAccount FLOAT,
+	PRIMARY KEY (customer_id)
+);
+
+CREATE TABLE properties (
+	property_id SERIAL,
+	type VARCHAR,
+	location VARCHAR,
+	rooms INT,
+	hasOwner BOOLEAN,
+	price FLOAT,
+	customer_id INT,
+	PRIMARY KEY (property_id),
+	FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+CREATE TABLE deals (
+	deal_id SERIAL,
+	customer_id INT,
+	property_id INT,
+	finished BOOLEAN,
+	PRIMARY KEY (deal_id),
+	FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+	FOREIGN KEY (property_id) REFERENCES properties(property_id)
+);
+
+INSERT INTO customers (name, surname, age, bankAccount) VALUES 
+('Alexander', 'Smith', 32, 60990),
+('Alua', 'Saiken', 50, 50432),
+('Ruslan', 'Kanatov', 46, 343005),
+('Samantha', 'Wilde', 17, 20000),
+('Maksim', 'Smirnov', 48, 203210),
+('Anastasia', 'Litvinova', 35, 400000),
+('Samat', 'Adalov', 28, 30000),
+('Mihail', 'Madiyev', 33, 41324),
+('Kamila', 'Medeshova', 41, 342982),
+('Adlet', 'Shorohov', 29, 35244),
+('Madiyar', 'Myrzatayev', 63, 134209),
+('Zhanna', 'Lee', 32, 42380),
+('Merey', 'Makar', 20, 21100),
+('Yelemes', 'Sakenova', 51, 24230),
+('Marat', 'Ziyanov', 55, 40000);
+
+INSERT INTO properties(type, location, rooms, hasOwner, price) VALUES
+('house', 'Kananbay Batyr st., 12 h., Nur-Sultan', 12, 'false', 214990),
+('flat', 'Saraishyk st., 5 h., Nur-Sultan', 2, 'false', 19990),
+('flat', 'Seifulin st., 32 h., Almaty', 3, 'true', 39990),
+('house', 'Zheltoksan st., 10 h., Nur-Sultan', 6, 'false', 140990),
+('flat', 'Naberezhnaya st, 3 h., Pavlodar', 3, 'false', 30990),
+('flat', 'Kunayev st., 19 h, Nur-Sultan', 4, 'false', 28990),
+('house', 'Panfilov st., 4 h., Nur-Sultan', 20, 'false', 350990),
+('flat', 'Turan st., 16 h., Nur-Sultan', 3, 'true', 29990),
+('flat', 'Dostyk st., 2 h., Nur-Sultan', 2, 'false', 29990),
+('house', 'Ryskulov st., 55 h., Nur-Sultan', 15, 'false', 250990),
+('flat', 'Uly Dala st., 7 h., Nur-Sultan', 3, 'false', 41990),
+('flat', 'Saraishyk st., 7a h., Nur-Sultan', 2, 'false', 21990),
+('flat', 'Turkestan st. 2 h., Nur-Sultan', 4, 'true', 28990),
+('house', 'Kananbay Batyr st., 13 h., Nur-Sultan', 12, 'false', 214990),
+('flat', 'Kunayev st., 7 h., Nur-Sultan', 3, 'true', 39990);

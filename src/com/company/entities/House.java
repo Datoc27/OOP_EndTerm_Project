@@ -8,6 +8,10 @@ public class House extends Property implements IHouse {
     public House() {
     }
 
+    public House(int id, String type, String location, int rooms, boolean hasOwner, double price) {
+        super(id, type, location, rooms, hasOwner, price);
+    }
+
     public House(String type, String location, int rooms, boolean hasOwner, double price) {
         super(type, location, rooms, hasOwner, price);
     }
