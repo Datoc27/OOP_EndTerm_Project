@@ -22,7 +22,7 @@ public class DealRepository implements IDealRepository {
         try {
             connection = dbManager.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM customer WHERE id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM customers WHERE customer_id=?");
 
             preparedStatement.setInt(1, id);
 
@@ -53,7 +53,7 @@ public class DealRepository implements IDealRepository {
         try {
             connection = dbManager.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM properties WHERE id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM properties WHERE property_id=?");
 
             preparedStatement.setInt(1, id);
 
@@ -149,11 +149,11 @@ public class DealRepository implements IDealRepository {
 
         preparedStatement.execute();
 
-        preparedStatement = connection.prepareStatement("UPDATE customers SET bankAccount=(SELECT customers WHERE id=?)-?-? WHERE id=?");
+        PreparedStatement preparedStatement2 = connection.prepareStatement("UPDATE customers SET bankAccount=(SELECT bankAccount FROM customers WHERE customer_id=?)-?-? WHERE customer_id=?");
 
-        preparedStatement.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
+        preparedStatement2.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
 
-        PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM properties WHERE id=?");
+        PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM properties WHERE property_id=?");
 
         preparedStatement1.setInt(1, getPropertyById(deal.getProperty_id()).getId());
 
@@ -185,16 +185,16 @@ public class DealRepository implements IDealRepository {
             house.houseInfo();
         }
 
-        preparedStatement.setInt(4, getCustomerById(deal.getCustomer_id()).getId());
+        preparedStatement2.setInt(4, getCustomerById(deal.getCustomer_id()).getId());
 
         preparedStatement.execute();
 
-        preparedStatement = connection.prepareStatement("UPDATE properties SET hasOwner=true, customer_id=? WHERE id=?");
+        PreparedStatement preparedStatement3 = connection.prepareStatement("UPDATE properties SET hasOwner=true, customer_id=? WHERE property_id=?");
 
-        preparedStatement.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
-        preparedStatement.setInt(2, getPropertyById(deal.getProperty_id()).getId());
+        preparedStatement3.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
+        preparedStatement3.setInt(2, getPropertyById(deal.getProperty_id()).getId());
 
-        preparedStatement.execute();
+        preparedStatement3.execute();
 
         getCustomerById(deal.getCustomer_id()).customerInfo();
 
@@ -207,16 +207,16 @@ public class DealRepository implements IDealRepository {
         return false;
 }
 
-    public boolean addMoneyToBankAccount(int id, double money) {
+    public boolean addMoneyToBankAccount(int id, int money) {
         Connection connection = null;
 
         try {
             connection = dbManager.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customers SET bankAccount=(SELECT customers WHERE id=?)+? WHERE id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customers SET bankAccount=(SELECT bankAccount FROM customers WHERE customer_id=?)+? WHERE customer_id=?");
 
             preparedStatement.setInt(1, id);
-            preparedStatement.setDouble(2, money);
+            preparedStatement.setInt(2, money);
             preparedStatement.setInt(3, id);
 
             preparedStatement.execute();
@@ -293,7 +293,7 @@ public class DealRepository implements IDealRepository {
         try {
             connection = dbManager.getConnection(); //connection with database
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM properties WHERE hasOwner=0"); //sql statement
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM properties WHERE hasOwner=false"); //sql statement
 
             ResultSet resultSet = preparedStatement.executeQuery(); //executeQuery method to change the data from the database into String data type
 

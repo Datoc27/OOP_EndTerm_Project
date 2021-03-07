@@ -10,7 +10,7 @@ public class DBManager implements IDBManager {
         try {
             Class.forName("org.postgresql.Driver");
 
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/PropertyMarket", "postgres", "1234");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/propertymarket", "postgres", "1234");
 
             return connection;
         }
