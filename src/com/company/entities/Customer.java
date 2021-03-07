@@ -69,7 +69,7 @@ public class Customer implements ICustomer {
 
     public String lookFor() {return this.getName() + " " + this.getSurname() + " is looking for a beautiful place to live";}
 
-    public String buyProperty() {return this.getName() + " " + this.getSurname() + " has bought a new property. His there is " + this.getBankAccount() + "left in their bank account!";}
+    public String buyProperty() {return this.getName() + " " + this.getSurname() + " has bought a new property. There is " + this.getBankAccount() + " left in their bank account!";}
 
     public void customerInfo(){
         System.out.println(lookFor());
