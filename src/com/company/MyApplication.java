@@ -25,7 +25,7 @@ public class MyApplication {
                     "8. Set cost for public services for flats\n" +
                     "9. Show all customers in the database\n" +
                     "10. Show all available houses\n" +
-                    "11. Show all available houses\n" +
+                    "11. Show all deals\n" +
                     "0. Exit\n");
             int operation = scanner.nextInt();
 

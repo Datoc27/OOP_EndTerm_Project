@@ -10,11 +10,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DealRepository implements IDealRepository {
-    private final IDBManager dbManager;
+    private final IDBManager dbManager; // dbmanager for the repository
 
     public DealRepository(IDBManager dbManager) {
         this.dbManager = dbManager;
-    }
+    } // constructor
 
     public Customer getCustomerById(int id) {
         Connection connection = null;
@@ -39,8 +39,7 @@ public class DealRepository implements IDealRepository {
             }
 
             return customer;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -72,8 +71,7 @@ public class DealRepository implements IDealRepository {
             }
 
             return property;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -96,8 +94,7 @@ public class DealRepository implements IDealRepository {
             preparedStatement.execute();
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -121,8 +118,7 @@ public class DealRepository implements IDealRepository {
             preparedStatement.execute();
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -133,79 +129,85 @@ public class DealRepository implements IDealRepository {
         Connection connection = null;
 
         try {
-        connection = dbManager.getConnection();
+            connection = dbManager.getConnection();
 
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO deals ( customer_id, property_id, finished) VALUES (?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO deals ( customer_id, property_id, finished) VALUES (?, ?, ?)");
 
-        preparedStatement.setInt(1, deal.getCustomer_id());
-        preparedStatement.setInt(2, deal.getProperty_id());
-        if (getCustomerById(deal.getCustomer_id()).getAge() < 18 || getCustomerById(deal.getCustomer_id()).getBankAccount() < getPropertyById(deal.getProperty_id()).getPrice() || getPropertyById(deal.getProperty_id()).isHasOwner()) {
-            preparedStatement.setBoolean(3, false);
+            preparedStatement.setInt(1, deal.getCustomer_id());
+            preparedStatement.setInt(2, deal.getProperty_id());
+            if (getCustomerById(deal.getCustomer_id()).getAge() < 18 ||
+                    getCustomerById(deal.getCustomer_id()).getBankAccount() < getPropertyById(deal.getProperty_id()).getPrice()
+                    || getPropertyById(deal.getProperty_id()).isHasOwner()) {
+                preparedStatement.setBoolean(3, false);
 
+                preparedStatement.execute();
+                return false;
+            }
+
+            preparedStatement.setBoolean(3, true);
             preparedStatement.execute();
-            return false;
+
+            PreparedStatement preparedStatement2 = connection.prepareStatement(
+                    "UPDATE customers SET bankAccount=(SELECT bankAccount FROM customers WHERE customer_id=?)-?-? WHERE customer_id=?"
+            );
+            preparedStatement2.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
+
+            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM properties WHERE property_id=?");
+            preparedStatement1.setInt(1, getPropertyById(deal.getProperty_id()).getId());
+            ResultSet resultSet = preparedStatement1.executeQuery();
+
+            Property property = new Property();
+
+            if (resultSet.next()) {
+                if (resultSet.getString("type").equals("flat")) {
+                    property = new Flat();
+                }
+                if (resultSet.getString("type").equals("house")) {
+                    property = new House();
+                }
+
+                property.setId(resultSet.getInt("property_id"));
+                property.setType(resultSet.getString("type"));
+                property.setLocation(resultSet.getString("location"));
+                property.setRooms(resultSet.getInt("rooms"));
+                property.setHasOwner(resultSet.getBoolean("hasOwner"));
+                property.setPrice(resultSet.getDouble("price"));
+                property.setCustomerId(resultSet.getInt("customer_id"));
+            }
+
+            if (property.getType().equals("flat")) {
+                Flat flat = (Flat) property;
+
+                preparedStatement2.setDouble(2, flat.getPrice());
+                preparedStatement2.setDouble(3, flat.getPublicServices());
+                flat.flatInfo();
+            } else if (property.getType().equals("house")) {
+                House house = (House) property;
+
+                preparedStatement2.setDouble(2, house.getPrice());
+                preparedStatement2.setDouble(3, house.getDiscount());
+                house.houseInfo();
+            }
+
+            preparedStatement2.setInt(4, getCustomerById(deal.getCustomer_id()).getId());
+            preparedStatement2.execute();
+
+            PreparedStatement preparedStatement3 = connection.prepareStatement("UPDATE properties SET hasOwner=true, customer_id=? WHERE property_id=?");
+
+            preparedStatement3.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
+            preparedStatement3.setInt(2, getPropertyById(deal.getProperty_id()).getId());
+
+            preparedStatement3.execute();
+
+            getCustomerById(deal.getCustomer_id()).customerInfo();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        preparedStatement.setBoolean(3, true);
-
-        preparedStatement.execute();
-
-        PreparedStatement preparedStatement2 = connection.prepareStatement("UPDATE customers SET bankAccount=(SELECT bankAccount FROM customers WHERE customer_id=?)-?-? WHERE customer_id=?");
-
-        preparedStatement2.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
-
-        PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM properties WHERE property_id=?");
-
-        preparedStatement1.setInt(1, getPropertyById(deal.getProperty_id()).getId());
-
-        ResultSet resultSet = preparedStatement1.executeQuery();
-
-        Property property = new Property();
-
-        if (resultSet.next()) {
-            property.setId(resultSet.getInt("property_id"));
-            property.setType(resultSet.getString("type"));
-            property.setLocation(resultSet.getString("location"));
-            property.setRooms(resultSet.getInt("rooms"));
-            property.setHasOwner(resultSet.getBoolean("hasOwner"));
-            property.setPrice(resultSet.getDouble("price"));
-            property.setCustomerId(resultSet.getInt("customer_id"));
-        }
-
-        if (property.getType().equals("Flat")) {
-            Flat flat = (Flat) property;
-
-            preparedStatement.setDouble(2, flat.getPrice());
-            preparedStatement.setDouble(3, flat.getPublicServices());
-            flat.flatInfo();
-        } else if (property.getType().equals("House")) {
-            House house = (House) property;
-
-            preparedStatement.setDouble(2, house.getPrice());
-            preparedStatement.setDouble(3, house.getDiscount());
-            house.houseInfo();
-        }
-
-        preparedStatement2.setInt(4, getCustomerById(deal.getCustomer_id()).getId());
-
-        preparedStatement.execute();
-
-        PreparedStatement preparedStatement3 = connection.prepareStatement("UPDATE properties SET hasOwner=true, customer_id=? WHERE property_id=?");
-
-        preparedStatement3.setInt(1, getCustomerById(deal.getCustomer_id()).getId());
-        preparedStatement3.setInt(2, getPropertyById(deal.getProperty_id()).getId());
-
-        preparedStatement3.execute();
-
-        getCustomerById(deal.getCustomer_id()).customerInfo();
-
-        return true;
-    }
-        catch (Exception e) {
-        e.printStackTrace();
-    }
 
         return false;
-}
+    }
 
     public boolean addMoneyToBankAccount(int id, int money) {
         Connection connection = null;
@@ -222,8 +224,7 @@ public class DealRepository implements IDealRepository {
             preparedStatement.execute();
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -235,8 +236,7 @@ public class DealRepository implements IDealRepository {
             House.discount = discount;
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -248,8 +248,7 @@ public class DealRepository implements IDealRepository {
             Flat.publicServices = publicServices;
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -268,7 +267,7 @@ public class DealRepository implements IDealRepository {
 
             ArrayList<Customer> customers = new ArrayList<>(); //arraylist of customers
 
-            while(resultSet.next()) { //iteration through resultSet from the database
+            while (resultSet.next()) { //iteration through resultSet from the database
                 Customer customer = new Customer(resultSet.getInt("customer_id"),
                         resultSet.getString("name"),
                         resultSet.getString("surname"),
@@ -279,8 +278,7 @@ public class DealRepository implements IDealRepository {
             }
 
             return customers;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -299,7 +297,7 @@ public class DealRepository implements IDealRepository {
 
             ArrayList<Property> properties = new ArrayList<>(); //arraylist of properties
 
-            while(resultSet.next()) { //iteration through resultSet from the database
+            while (resultSet.next()) { //iteration through resultSet from the database
                 Property property = new Property(resultSet.getInt("property_id"),
                         resultSet.getString("type"),
                         resultSet.getString("location"),
@@ -311,8 +309,7 @@ public class DealRepository implements IDealRepository {
             }
 
             return properties;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -331,7 +328,7 @@ public class DealRepository implements IDealRepository {
 
             ArrayList<Deal> deals = new ArrayList<>(); //arraylist of deals
 
-            while(resultSet.next()) { //iteration through resultSet from the database
+            while (resultSet.next()) { //iteration through resultSet from the database
                 Deal deal = new Deal(resultSet.getInt("deal_id"),
                         resultSet.getInt("customer_id"),
                         resultSet.getInt("property_id"),
@@ -341,8 +338,7 @@ public class DealRepository implements IDealRepository {
             }
 
             return deals;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

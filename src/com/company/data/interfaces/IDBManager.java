@@ -3,5 +3,5 @@ package com.company.data.interfaces;
 import java.sql.Connection;
 
 public interface IDBManager {
-    Connection getConnection(); //getting a connection
+    Connection getConnection(); //getting a connection method
 }

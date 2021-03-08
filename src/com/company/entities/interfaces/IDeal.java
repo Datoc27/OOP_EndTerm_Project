@@ -1,5 +1,5 @@
 package com.company.entities.interfaces;
 
-public interface IDeal {
+public interface IDeal { // deal interface
     String happen(); //some string method
 }

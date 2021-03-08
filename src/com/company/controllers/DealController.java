@@ -5,7 +5,7 @@ import com.company.entities.Deal;
 import com.company.entities.Property;
 import com.company.repositories.interfaces.IDealRepository;
 
-public class DealController {
+public class DealController { // controller which holds and calls the methods from the repository
     private final IDealRepository dealRepository;
 
     public DealController(IDealRepository dealRepository) {

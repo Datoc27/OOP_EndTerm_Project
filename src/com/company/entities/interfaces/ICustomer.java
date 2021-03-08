@@ -1,6 +1,6 @@
 package com.company.entities.interfaces;
 
-public interface ICustomer {
+public interface ICustomer { // an interface for Customer class
     String lookFor();
     String buyProperty();
 }

@@ -8,9 +8,9 @@ import java.sql.DriverManager;
 public class DBManager implements IDBManager {
     public Connection getConnection() {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName("org.postgresql.Driver"); // driver for postgresql
 
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/propertymarket", "postgres", "1234");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/propertymarket", "postgres", "1234"); // connection with the database
 
             return connection;
         }
